@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<title>Trening</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="row">
+			<div class="col-lg-10" style="margin-bottom:70px;">
+				<h1>Trening drużyny</h1>
+				<p>Drużyna może trenować raz dziennie!</p>
+			</div>
+		</div>
+		
+		<div class="alert alert-danger" th:if="${errorTooEarly}"><strong>Błąd! </strong>Twoja drużyna już dzisiaj trenowała!</div>
+		<div class="alert alert-success" th:if="${success}"><strong>Sukces! </strong> Trening zakończony</div>
+		
+		<div class="container" th:action="@{/training}" method="get">
+			<div><p>Ostatni Trening: <span th:text="${dateLastTraining}"></span></p>
+			<p>Wpływ asystent trenera: <span th:text="${cInf}"></span></p>
+			<p>Wpływ lekarza: <span th:text="${mInf}"></span></p>
+			<p>Wpływ fizjoterapeuty: <span th:text="${pInf}"></span></p>
+			<p>Wpływ masażysty: <span th:text="${nInf}"></span></p>
+			<p>Wpływ trener przygotowania fizycznego: <span th:text="${rInf}"></span></p>
+			<p>Wpływ stadionu treningowego: <span th:text="${stadiumInf}"></span></p>
+			<p><a class="btn btn-large btn-primary" th:href="@{/startTraining(idTeam=${idTeam}, wholeInfluence=${wholeInfluence})}">Trenuj</a></p>
+			<a class="btn btn-large" th:href="'/teamDetails?idTeam=' + ${idTeam}">Wróć</a></div>
+		</div>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+
+</body>
+</html>

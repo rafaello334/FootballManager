@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Lista zawodników</title>
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/budget.js"></script>
+	</meta>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="row">
+			<div class="col-lg-10" style="margin-bottom:70px;">
+				<h1>Trenerzy spełniający podane kryteria</h1>
+			</div>
+			<div class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+		</div>
+		
+		<div class="alert alert-danger" th:if="${errorBudget}"><strong>Błąd! </strong>Niewystarczająca liczba pieniędzy na zakup trenera: <span th:text="${name}"></span></div>
+		<div class="alert alert-danger" th:if="${errorAccessible}"><strong>Błąd! </strong>Podany trener posiada drużynę</div>
+		<div class="alert alert-success" th:if="${success}"><strong>Sukces! </strong> Kupiono trenera <span th:text="${name}"></span></div>
+		
+		<div class="container" th:action="@{/npcTrainerList}" method="get">
+			<h3>Trenerzy dostępni do zakupu</h3>
+			<table class="table" style="margin-bottom:100px;">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Koszt</th>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr th:each="npcTrainer : ${trainerToBuyList}">
+						<td><span th:text="${npcTrainer.name}"></span></td>
+						<td><span th:text="${npcTrainer.cost}"></span></td>
+						<td>
+							<a class="btn btn-large btn-primary" th:href="@{/npcTrainerStats(idNPC=${npcTrainer.idNPC}, idTeam=${idTeam}, name=${searchPlayerForm.name}, minCost=${searchPlayerForm.minCost}, maxCost=${searchPlayerForm.maxCost})}">Szczegóły</a>
+						</td>
+						
+						<td>
+							<div th:if="${npcTrainer.idTeam == 0}">
+								<a class="btn btn-large btn-primary" th:href="@{/buyNPCTrainer(idNPC=${npcTrainer.idNPC}, idTeam=${idTeam}, name=${searchPlayerForm.name}, minCost=${searchPlayerForm.minCost}, maxCost=${searchPlayerForm.maxCost})}">Kup trenera</a>
+							</div>
+						</td>	
+						<td></td>
+					</tr>
+					
+					<tr>
+						<td/>
+						<td/>
+						<td/>
+						<td/>	
+						<td/>	
+					</tr>
+				</tbody>
+			</table>
+			
+			<h3>Trenerzy posiadający drużynę</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Koszt</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="npcTrainer : ${npcTrainerList}">
+						<td><span th:text="${npcTrainer.name}"></span></td>
+						<td><span th:text="${npcTrainer.cost}"></span></td>
+						<td>
+							<a class="btn btn-large btn-primary" th:href="@{/npcTrainerStats(idNPC=${npcTrainer.idNPC}, idTeam=${idTeam}, name=${searchPlayerForm.name}, minCost=${searchPlayerForm.minCost}, maxCost=${searchPlayerForm.maxCost})}">Szczegóły</a>
+						</td>
+						
+						<td>
+							<div th:if="${npcTrainer.idTeam == 0}">
+								<a class="btn btn-large btn-primary" th:href="@{/buyNPCTrainer(idNPC=${npcTrainer.idNPC}, idTeam=${idTeam}, name=${searchPlayerForm.name}, minCost=${searchPlayerForm.minCost}, maxCost=${searchPlayerForm.maxCost})}">Kup trenera</a>
+							</div>
+						</td>
+						<td>
+						</td>	
+					</tr>	
+					
+					<tr>	
+						<td/>
+						<td/>
+						<td/>
+						<td/>	
+						<td/>	
+					</tr>
+				</tbody>
+			</table>
+			
+	<a class="btn btn-large btn-primary" th:href="'/searchTrainer?idTeam=' + ${idTeam}">Wróć</a>
+		</div>
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+
+	
+
+</body>
+</html>

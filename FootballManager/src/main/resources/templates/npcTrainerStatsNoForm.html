@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/budget.js"></script>
+<title>NPCTrainerStats</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+
+		<div class="row">
+			<div class="col-lg-10">
+				<h1>Szczegóły trenera</h1>
+			</div>
+			
+			<div class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+		</div>
+		
+		<table class="table">
+		
+			<tr>
+				<td>Nazwa</td>
+				<td><span th:text="${trainer.name}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Koszt</td>
+				<td><span th:text="${trainer.cost}"></span></td>
+			</tr>
+			
+			<tr>
+				<td>Typ</td>
+				<td><span th:text="${trainer.trainerType.toStringFullName()}"></span></td>
+			</tr>
+			
+			<tr>
+				<td>
+					<a class="btn btn-large btn-primary" th:href="'/teamDetails?idTeam=' + ${idTeam}">Wróć</a>
+				</td>
+				<td/>
+				<td/>
+			</tr>
+			
+		</table>
+	</div>
+</body>
+</html>

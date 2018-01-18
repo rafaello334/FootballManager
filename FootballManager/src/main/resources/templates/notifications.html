@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<title>Powiadomienia</title>
+</head>
+<body class="container">
+	<div th:replace="fragments/navbar :: navbar"></div>
+	
+	<h3>Dodaj nowe powiadomienie</h3>
+		<form action="#" th:action="@{/addNotification}" th:object="${notificationForm}" method="post">
+			<input type="text" class="input-block-level"  th:field="*{text}" placeholder="Wiadomość" />
+			<input type="datetime-local" class="input-block-level" name="startDate" placeholder="Data rozpoczęcia (RRRR-MM-DDTHH:mm)" />
+			<input type="datetime-local" class="input-block-level" name="finishDate" placeholder="Data zakończenia (RRRR-MM-DDTHH:mm)" /> 
+			<input type="text" class="input-block-level" name="player" placeholder="Login gracza (jeśli pojedyncze)" />
+			<button class="btn btn-large btn-primary" type="submit">Dodaj</button>
+			<br/>
+			<span th:each="type : ${notificationTypes}">
+				<input type ="radio" th:field="*{type}" th:value="${type.name()}" />
+				<label th:for="${#ids.prev('type')}" th:text="${type.toLongString()}"></label>
+			</span>
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('text')}">Niepoprawna wiadomość</div>
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('startDate')}">Niepoprawna data rozpoczęcia</div>
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('finishDate')}">Niepoprawna data zakończenia</div>
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('type')}">Nie wybrano typu powiadomienia</div>
+			<div class="alert alert-danger" th:if="${missingPlayer}">Podany użytkownik nie istnieje</div>
+			<div class="alert alert-success" th:if="${success}">Dodano powiadomienie</div>
+		</form>
+	
+	<br/><br/>
+	<h3>Aktualne powiadomienia</h3>
+		<table class="table" style="margin-bottom:100px;">
+			<thead>
+				<tr>
+					<th>Wiadomość</th>
+					<th>Data rozpoczęcia</th>
+					<th>Data zakończenia</th>
+					<th>Cel</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="notif : ${currentNotifications}">
+					<td><span th:text="${notif.text}"></span></td>
+					<td><span th:text="${#temporals.format(notif.startDate, 'dd MMM yyyy, HH:mm')}"></span></td>
+					<td><span th:text="${#temporals.format(notif.finishDate, 'dd MMM yyyy, HH:mm')}"></span></td>
+					<td th:unless="${notif.type.toString() == 's'}">
+						<span th:text="${notif.type.toLongString()}"></span>
+					</td>
+					<td th:if="${notif.type.toString() == 's'}">
+						<span th:text="${notif.player.login}"></span>
+					</td>
+					<td>
+						<button class="btn btn-primary" th:onclick="'$.post(\'removeNotification\', { id: \'' + ${notif.id} +'\' });
+							setTimeout(function () {window.location.href = \'notifications\';}, 500);'">Usuń</button>
+					</td>
+				</tr>
+				
+				<tr>
+					<td/>
+					<td/>
+					<td/>
+					<td/>	
+					<td/>
+				</tr>
+			</tbody>
+		</table>
+		
+	<h3>Nieaktualne powiadomienia</h3>
+		<table class="table" style="margin-bottom:100px;">
+			<thead>
+				<tr>
+					<th>Wiadomość</th>
+					<th>Data rozpoczęcia</th>
+					<th>Data zakończenia</th>
+					<th>Cel</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="notif : ${expiredNotifications}">
+					<td><span th:text="${notif.text}"></span></td>
+					<td><span th:text="${#temporals.format(notif.startDate, 'dd MMM yyyy, HH:mm')}"></span></td>
+					<td><span th:text="${#temporals.format(notif.finishDate, 'dd MMM yyyy, HH:mm')}"></span></td>
+					<td th:unless="${notif.type.toString() == 's'}">
+						<span th:text="${notif.type.toLongString()}"></span>
+					</td>
+					<td th:if="${notif.type.toString() == 's'}">
+						<span th:text="${notif.player.login}"></span>
+					</td>
+					<td>
+						<button class="btn btn-primary" th:onclick="'$.post(\'removeNotification\', { id: \'' + ${notif.id} +'\' });
+							setTimeout(function () {window.location.href = \'notifications\';}, 500);'">Usuń</button>
+					</td>
+				</tr>
+				
+				<tr>
+					<td/>
+					<td/>
+					<td/>
+					<td/>	
+					<td/>
+				</tr>
+			</tbody>
+		</table>
+</body>
+</html>

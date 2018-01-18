@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+	<div class="container">
+		<div class="container" th:action="@{/manageTeam}" method="get">
+			<ul th:each="team : ${playerTeams}">
+				<li class="list-group-item"><span th:text="${team.name}"></span>
+					<a class="btn btn-large btn-primary" th:href="'/teamDetails?idTeam=' + ${team.idTeam}">Zarządzaj</a>
+				</li>
+			</ul>
+		</div>
+		<div th:if="${playerTeams.size() == 0}">Nie masz żadnych drużyn. Stwórz swoją pierwszą, aby zacząć rozgrywkę!</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/budget.js"></script>
+	<script type="text/javascript" src="js/stadiumTrainingCost.js"></script>
+	<script type="text/javascript" src="js/stadiumTrainingXP.js"></script>
+	<title>Zarządzanie boiskiem treningowym</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="row">
+			<div class="col-lg-10" style="margin-bottom:70px;">
+				<h1>Zarządzanie boiskiem treningowym</h1>
+			</div>
+			
+			<div class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+		</div>
+		
+		<div class="alert alert-danger" th:if="${errorBudget}"><strong>Błąd! </strong>Niewystarczająca liczba pieniędzy na ulepszenie boiska</div>
+		
+		<div class="container" th:action="@{/stadiumTraining}" method="get">
+			<div class="col-lg-2" th:replace="fragments/cost :: cost"></div>
+			<div class="col-lg-2" th:replace="fragments/xpMultiplier :: xpMultiplier"></div>
+			<p><a class="btn btn-large btn-primary" th:href="@{/upgradeStadiumTraining(idTeam=${idTeam})}">Ulepsz</a></p>
+			<a class="btn btn-large" th:href="'/teamDetails?idTeam=' + ${idTeam}">Wróć</a>
+		</div>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+
+</body>
+</html>

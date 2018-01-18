@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript"
+	src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<script th:unless="${adminPage}" type="text/javascript" src="js/budget.js"></script>
+<script th:unless="${adminPage}" type="text/javascript" src="js/prestige.js"></script>
+<title>Szczegóły ligi</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+
+		<div class="row">
+			<div class="col-lg-10">
+				<h1>
+					Szczegóły ligi: "<span th:text="${league.name}"></span>"
+				</h1>
+			</div>
+
+			<div th:unless="${adminPage}" class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+			<div th:unless="${adminPage}" class="col-lg-2" th:replace="fragments/prestige :: prestige"></div>
+		</div>
+
+		<div class="alert alert-success" th:if="${playNowSuccess}"><strong>Sukces!</strong>Rozegrano mecz.</div>
+
+		<div>
+			<h3 style="margin-bottom: 40px;">Drużyny</h3>
+		</div>
+		<table class="table" style="margin-bottom: 40px;">
+			<thead>
+				<tr>
+					<th>Nazwa drużyny</th>
+					<th>Prestiż</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="team : ${teamList}">
+					<td><span th:text="${team.name}"></span></td>
+					<td><span th:text="${team.prestige}"></span></td>
+					<td></td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td />
+					<td />
+					<td />
+					<td />
+				</tr>
+			</tbody>
+		</table>
+
+		<div>
+			<h3 style="margin-bottom: 40px;">Terminarz meczy</h3>
+		</div>
+
+		<table th:each="map : ${matchesList}" class="table" style="margin-bottom: 40px;">
+				<h4 style="margin-bottom: 20px;">
+					<b><span th:text="${map.key}"></span>. kolejka</b>
+				</h4>
+			<thead>
+				<tr>
+					<th>Gospodarze</th>
+					<th>Goście</th>
+					<th>Data meczu</th>
+					<th>Szczegóły meczu</th>
+					<th th:if="${adminLogged} and ${adminPage}">Rozegraj mecz</th>
+					<th>Wynik</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="match : ${map.value}">
+					<td><span th:text="${teamDB.findById(match.idTeam1).name}"></span></td>
+					<td><span th:text="${teamDB.findById(match.idTeam2).name}"></span></td>
+					<td><span th:text="${#temporals.format(match.datePlayed, 'dd MMM yyyy, HH:mm')}"></span></td>
+					<td><a class="btn btn-large btn-primary" th:href="@{/matchDetails(idGame=${match.idGame}, idTeam=${idTeam}, idLeague=${match.idLeague}, admin=${adminPage ? 'true' : 'false'})}">Szczegóły</a></td>
+					<td th:if="${adminLogged} and ${adminPage}"><a class="btn btn-large btn-primary" th:if="${(match.score).equals(' ')}" th:onclick="'playNow(' + ${match.idGame} + ')'">Rozegraj</a></td>
+					<td><span th:text="${match.score}"></span></td>
+				</tr>
+
+				<tr>
+					<td />
+					<td />
+					<td />
+					<td />
+					<td />
+					<td />
+				</tr>
+			</tbody>
+		</table>
+
+		<a class="btn btn-large btn-primary" th:unless="${adminPage}" th:href="'/teamDetails?idTeam=' + ${idTeam}">Wróć</a>
+		<a class="btn btn-large btn-primary" th:if="${adminPage}" th:href="'/league'">Wróć</a>
+		<div th:replace="fragments/chat :: chat"></div>
+		<div th:replace="fragments/footer :: footer"></div>
+		
+		<script type="text/javascript">
+			function playNow(idGame) {
+				$.ajax({
+					method : 'POST',
+					url : 'playNow',
+					data : {
+						idGame : idGame,
+					}
+				}).done(function(html) {
+					window.location.href = 'leagueDetails?idTeam=' + idTeam + 'idLeague=' + idLeague;
+				});
+				setTimeout(function(){
+				    location.reload();
+				}, 500);
+			}
+		</script>
+	</div>
+
+
+</body>
+</html>

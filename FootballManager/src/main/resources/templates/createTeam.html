@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<title>Tworzenie drużyny</title>
+</head>
+<body>
+
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<form action="#" th:action="@{/createTeam}" th:object="${createTeamForm}" method="post">
+			<h2>Tworzenie drużyny</h2>
+			<input id="name" type="text" class="input-block-level" th:field="*{name}" placeholder="Nazwa drużyny" />
+			<button class="btn btn-large btn-primary" type="submit">Stwórz</button>
+			<a class="btn btn-large btn-primary" href="logged">Wróć</a>
+			<br/><br/>
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('name')}"><strong>Błąd!</strong> Niepoprawna nazwa drużyny. Nazwa musi mieć co najmniej 10 znaków. Dozwolone: małe i duże litery, cyfry i spacje.<br/></div>
+			<div class="alert alert-danger" th:if="${errorUnique}"><strong>Błąd!</strong> Podana nazwa jest już zajęta.</div>
+			<div class="alert alert-success" th:if="${success}"><strong>Sukces!</strong> Stworzono drużynę <span th:text="${name}"></span>.</div>
+		</form>
+		
+		<script type="text/javascript" th:if="${success}">
+			$("#name").val("");
+		</script>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+</body>
+</html>

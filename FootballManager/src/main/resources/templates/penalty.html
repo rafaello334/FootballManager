@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Nakładanie kary finansowej</title>
+<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+			<div th:replace="fragments/navbar :: navbar"></div>
+			<div>
+			<div class="alert alert-success" th:if="${success}">Nałożono karę na drużyny gracza <span th:text="${successLogin}"></span></div>
+			<div class="alert alert-danger" th:if="${errorExist}"><strong>Błąd! </strong>Podany użytkownik nie istnieje.</div>
+				<form action="#" th:action="@{/penalty}" th:object="${penaltyForm}" method="post">
+					<input type="text" id="targetName" name="targetName" placeholder = "Nazwa gracza" th:value="${target}"/>
+					<input type="text" th:field="*{amount}" placeholder = "Wysokość kary"/>
+					<button class="btn btn-large btn-primary" type="submit">Zgłoś</button>
+					<div class="alert alert-danger" th:if="${#fields.hasErrors('amount')}"><strong>Błąd!</strong> Wysokość kary musi być liczbą i wynosić conajmniej 1.</div>
+					<div class="alert alert-danger" th:if="${#fields.hasErrors('targetName')}"><strong>Błąd!</strong> Nazwa nie może być pusta i nie może zawierać znaków specjalnych</div>
+				</form>
+			</div>
+			
+			<div th:replace="fragments/footer :: footer"></div>
+	</div>
+	
+	<script type="text/javascript">
+		$("#amount").val("");
+	</script>
+</body>
+</html>

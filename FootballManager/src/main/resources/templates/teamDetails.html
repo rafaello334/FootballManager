@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/budget.js"></script>
+	<script type="text/javascript" src="js/prestige.js"></script>
+	<title>Zarządzanie drużyną</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="row" style="margin-bottom: 20px;">
+			<div class="col-lg-10">
+				<h1>Zarządzanie drużyną <span th:text="${team.name}"></span></h1>
+			</div>
+			
+			<div class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+			<div class="col-lg-2" th:replace="fragments/prestige :: prestige"></div>
+		</div>
+		
+		<a class="btn btn-large" th:href="'/searchPlayer?idTeam=' + ${idTeam}">Wyszukiwanie zawodników</a>
+		<a class="btn btn-large" th:href="'/searchTrainer?idTeam=' + ${idTeam}">Wyszukiwanie sztabu szkoleniowego</a>
+		<a class="btn btn-large" th:href="'/comparePlayers?idTeam=' + ${idTeam}">Porównywanie zawodników</a>
+		<a class="btn btn-large" th:href="'/stadiumTraining?idTeam=' + ${idTeam}">Zarządzanie boiskiem treningowym</a>
+		<a class="btn btn-large" th:href="'/joinLeague?idTeam=' + ${idTeam}">Ligi</a>
+		<a class="btn btn-large" th:href="'/training?idTeam=' + ${idTeam}">Trening</a>
+		<a class="btn btn-large btn-primary" href="/main">Wróć</a>
+		
+		<div class="alert alert-danger" th:if="${errorSquadFull}"><strong>Błąd! </strong>Skład jest pełny!</div>
+		<div class="alert alert-success" th:if="${successAdd}"><strong>Sukces! </strong>Dodano zawodnika do składu!</div>
+		<div class="alert alert-success" th:if="${successDelete}"><strong>Sukces! </strong>Usunięto zawodnika ze składu!</div>
+		
+		<div class="col-lg-10" style="margin-top: 50px;">
+			<h3>Ligi tej drużyny</h3>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Prestiż</th>
+						<th>Liczba drużyn</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="league : ${leagueList}">
+						<td><span th:text="${league.name}"></span></td>
+						<td><span th:text="${league.requiredPrestige}"></span></td>
+						<td><span th:text="${league.actualNumberOfTeams}"></span></td>
+						<td>
+							<a class="btn btn-large btn-primary" th:href="@{/leagueDetails(idTeam=${idTeam}, idLeague=${league.idLeague})}">Szczegóły</a>
+
+						</td>
+						
+						<td></td>
+					</tr>
+						
+					<tr>
+						<td/>
+						<td/>
+						<td/>
+						<td/>	
+						<td/>	
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="col-lg-10" style="margin-top: 50px;">
+			<h3>Główny skład</h3>
+		</div>	
+		<div id="holder" style="margin: 30px 0px 50px 0px">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Pozycja</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="npcPlayer : ${playersInSquad}">
+						<td><span th:text="${npcPlayer.name}"></span></td>
+						<td><span th:text="${npcPlayer.position.toStringFullName()}"></span></td>
+						<td><a class="btn btn-large btn-primary"
+							th:href="@{/npcPlayerStats(idNPC=${npcPlayer.idNPC}, idTeam=${idTeam})}">Szczegóły</a>
+						</td>
+						<td><a class="btn btn-large btn-primary"
+							th:href="@{/deleteFromSquad(idNPC=${npcPlayer.idNPC}, idTeam=${idTeam})}">Usuń ze składu</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+				
+		</div>
+			
+		<div class="col-lg-10" style="margin-top: 50px;">
+			<h3>Pozostali zawodnicy</h3>
+		</div>	
+		<div id="holderSquad" style="margin: 30px 0px 50px 0px">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Pozycja</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="npcPlayer : ${players}">
+						<td><span th:text="${npcPlayer.name}"></span></td>
+						<td><span th:text="${npcPlayer.position.toStringFullName()}"></span></td>
+						<td><a class="btn btn-large btn-primary"
+							th:href="@{/npcPlayerStats(idNPC=${npcPlayer.idNPC}, idTeam=${idTeam})}">Szczegóły</a>
+						</td>
+						<td><a class="btn btn-large btn-primary"
+							th:href="@{/addToSquad(idNPC=${npcPlayer.idNPC}, idTeam=${idTeam})}">Dodaj do składu</a>
+						</td>
+						<td>
+							<form action="#" th:action="@{/npcSell}" th:object="${transferForm}" method="post">
+								<input type="text" class="input-block-level"  th:field="*{cost}" placeholder="koszt"/>
+								<input type="hidden" id="idNPC" name="idNPC" th:value="${npcPlayer.idNPC}"/>
+								<input type="hidden" th:field="*{idTeam}" th:value="${idTeam}"/>  
+									<div class="alert alert-warning" th:if="${#fields.hasErrors('cost')}" th:errors="cost">Błędna kwota</div>
+								<button class="btn btn-large btn-primary" type="submit">Wystaw na transfer</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+				
+		</div>
+		
+		
+		<div class="col-lg-10">
+			<h3>Sztab szkoleniowy</h3>
+		</div>	
+		
+		<div id="trainerHolder">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Rodzaj</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="npcTrainer : ${trainers}">
+						<td><span th:text="${npcTrainer.name}"></span></td>
+						<td><span th:text="${npcTrainer.trainerType.toStringFullName()}"></span></td>
+						<td><a class="btn btn-large btn-primary"
+							th:href="@{/npcTrainerStats(idNPC=${npcTrainer.idNPC}, idTeam=${idTeam})}">Szczegóły</a>
+						</td>
+					</tr>				
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="col-lg-10">
+			<h3>Nadchodzące spotkania</h3>
+		</div>
+		<div id="matchHook"></div>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+		$('#matchHook').load('/getTeamMatches?idTeam=[[${idTeam}]]');
+	</script>
+</body>
+</html>

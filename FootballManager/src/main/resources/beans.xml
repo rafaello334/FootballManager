@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource">
+		<property name="URL" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
+		<property name="user" value="fm" />
+		<property name="password" value="fm" />
+	</bean>
+
+	<bean id="PlayerDB" class="fm.db.PlayerDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="TeamDB" class="fm.db.TeamDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="NPCPlayerDB" class="fm.db.NPCPlayerDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="StadiumTrainingDB" class="fm.db.StadiumTrainingDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="NotificationDB" class="fm.db.NotificationDB">
+		<property name="dataSource" ref="dataSource" />
+		<property name="pdb" ref="PlayerDB" />
+	</bean>
+
+	<bean id="NPCTrainerDB" class="fm.db.NPCTrainerDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="ChatMessageDB" class="fm.db.ChatMessageDB">
+		<property name="dataSource" ref="dataSource" />
+		<property name="pdb" ref="PlayerDB" />
+	</bean>
+
+	<bean id="LeagueDB" class="fm.db.LeagueDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="MatchDB" class="fm.db.MatchDB">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>
+	
+	<bean id = "ReportDB"
+		class = "fm.db.ReportDB" >
+		<property name = "dataSource" ref = "dataSource" />
+	</bean>
+</beans>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+	<ul class="chat">
+		<li th:each="msg : ${chatMessages}" th:unless="${msg.removed and adminLogged == null and modLogged == null}" th:class="${msg.sender.login} == ${login} ? (${msg.removed} ? 'right clearfix removed' : 'right clearfix') : (${msg.removed} ? 'left clearfix removed' : 'left clearfix')">
+			<span class="chat-img " th:classappend="${msg.sender.login} == ${login} ? 'pull-right' : 'pull-left'">
+				<img th:src="'https://api.adorable.io/avatars/35/' + ${msg.sender.login} + '@fm.pulawskig.png'" th:alt="${msg.sender.login}" class="img-circle" />
+			</span>
+			<div class="chat-body clearfix">
+				<div class="header">
+					<strong class="primary-font" th:unless="${msg.sender.login} == ${login}" th:text="${msg.sender.login}"></strong>
+					<small class="text-muted" th:attrprepend="class=${msg.sender.login} == ${login} ? '' : 'pull-right '" th:inline="text">
+						<span class="glyphicon glyphicon-time"></span>
+						[[${#temporals.format(msg.date, 'dd MMM yyyy, HH:mm')}]]
+					</small>
+					<strong class="pull-right primary-font" th:if="${msg.sender.login} == ${login}">Ty</strong>
+				</div>
+				<p th:text="${msg.text}"></p>
+				<span class="chat-options" th:classappend="${msg.sender.login} == ${login} ? 'pull-right' : 'pull-left'">
+					<span th:if="${adminLogged != null or modLogged != null}">
+						<button th:unless="${msg.removed}" class="btn btn-danger btn-xs option-btn" th:onclick="'setRemoved(' + ${msg.id} + ', true)'">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+						<button th:if="${msg.removed}" class="btn btn-success btn-xs option-btn" th:onclick="'setRemoved(' + ${msg.id} + ', false)'">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<a class="btn btn-warning btn-xs option-btn" th:href="@{/penalty(target=${msg.sender.login})}">
+							<span class="glyphicon glyphicon-warning-sign"></span>
+						</a>
+					</span>
+					<a th:unless="${msg.removed or adminLogged != null or modLogged != null}" class="btn btn-info btn-xs option-btn" th:href="@{/reportPlayer(target=${msg.sender.login})}">
+							<span class="glyphicon glyphicon-bell"></span>
+					</a>
+				</span>
+			</div>
+		</li>
+	</ul>
+</body>
+</html>

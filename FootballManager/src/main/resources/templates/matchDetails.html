@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript"
+	src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<title>Szczegóły meczu</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+
+		<div class="row">
+			<div class="col-lg-10">
+				<h1 style="margin-bottom: 30px;">Szczegóły meczu</h1>
+			</div>
+
+			<div class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+			<div class="col-lg-2" th:replace="fragments/prestige :: prestige"></div>
+		</div>
+
+		<h3>Drużyna: <span th:text="${team1.name}"></span></h3>	
+		<table class="table" style="margin-bottom: 50px;">
+			<thead>
+				<tr>
+					<th>Nazwa</th>
+					<th>Suma statystyk zawodnika</th>
+					<th>Pozycja</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="npcPlayer : ${squadTeam1}">
+					<td><span th:text="${npcPlayer.name}"></span></td>
+					<td><span th:text="${npcPlayer.stamina} + ${npcPlayer.strength} + ${npcPlayer.agility} + ${npcPlayer.speed} + ${npcPlayer.endurance} + ${npcPlayer.health} + ${npcPlayer.fatigue}"></span></td>
+					<td><span th:text="${npcPlayer.position.toStringFullName()}"></span></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		
+		
+		<h3>Drużyna: <span th:text="${team2.name}"></span></h3>
+				<table class="table" style="margin-bottom: 50px;">
+			<thead>
+				<tr>
+					<th>Nazwa</th>
+					<th>Suma statystyk zawodnika</th>
+					<th>Pozycja</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="npcPlayer : ${squadTeam2}">
+					<td><span th:text="${npcPlayer.name}"></span></td>
+					<td><span th:text="${npcPlayer.stamina} + ${npcPlayer.strength} + ${npcPlayer.agility} + ${npcPlayer.speed} + ${npcPlayer.endurance} + ${npcPlayer.health} + ${npcPlayer.fatigue}"></span></td>
+					<td><span th:text="${npcPlayer.position.toStringFullName()}"></span></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a class="btn btn-large btn-primary"
+			th:href="@{/leagueDetails(idTeam=${idTeam}, idLeague=${league.idLeague}, admin=${adminPage})}">Wróć</a>
+		<div th:replace="fragments/chat :: chat"></div>
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+
+
+</body>
+</html>

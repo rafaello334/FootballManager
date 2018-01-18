@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css'/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/notifications.js"></script>
+<title>Menedżer Piłkarski</title>
+</head>
+<body>
+	 <div th:replace="fragments/navbar :: navbar"></div>
+	 
+	 <div id="notifications"></div>
+	 
+	 <h1>Twoje drużyny <a class="btn btn-primary" href="/createTeam">Stwórz nową</a></h1>
+	 <div id="teamHook"></div>
+	 
+	 <h1>Twoje nadchodzące spotkania</h1>
+	 <div id="matchHook" class="container"></div>
+	 
+	 <div th:replace="fragments/footer :: footer"></div>
+
+	 <div th:replace="fragments/chat :: chat"></div>
+
+	 <script type="text/javascript">
+	 	$('#teamHook').load('/manageTeam');
+	 	$('#matchHook').load('/getPlayerMatches');
+	 </script>
+</body>
+</html>

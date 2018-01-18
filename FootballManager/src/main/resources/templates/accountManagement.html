@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript"
+	src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<title>Zarządzanie kontami</title>
+</head>
+<body>
+	<div class="container" th:action="@{/accountManagement}" method="post">
+
+		<div th:replace="fragments/navbar :: navbar"></div>
+
+		<h1>Zarządzanie kontami</h1>
+
+		<div class="container">
+			<table class="table" style="margin-bottom: 50px; margin-top: 50px;">
+				<thead>
+					<tr>
+						<th>Nazwa użytkownika</th>
+						<th>Typ gracza</th>
+						<th>Banowanie</th>
+						<th>Uprawnienia administratorskie</th>
+						<th>Uprawnienia moderatorskie</th>
+						<th>Brak uprawnień</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="player : ${playersList}">
+						<td><span th:text="${player.login}"></span></td>
+						<td><span th:text="${player.type.toStringFullName()}"></span></td>
+						<td>
+							<button class="btn btn-large btn-primary"
+								th:if="${player.banned}"
+								th:onclick="'$.post(\'accountManagement\', { accountId: \'' + ${player.idPlayer} +'\' }); 		
+							setTimeout(function () {window.location.href = \'accountManagement\';}, 500);'">Odbanuj</button>
+
+							<button class="btn btn-large btn-primary"
+								th:if="${player.banned} == false"
+								th:onclick="'$.post(\'accountManagement\', { accountId: \'' + ${player.idPlayer} +'\' }); 		
+				   			setTimeout(function () {window.location.href = \'accountManagement\';}, 500);'">Zbanuj</button>
+
+						</td>
+						<td>
+							<button class="btn btn-large btn-primary"
+								th:onclick="'uprawnieniaAdministrator(' + ${player.idPlayer} + '); czekaj(500);'">Administrator</button>
+						</td>
+						<td>
+							<button class="btn btn-large btn-primary"
+								th:onclick="'uprawnieniaModerator(' + ${player.idPlayer} + '); czekaj(500);'">Moderator</button>
+						</td>
+						<td>
+							<button class="btn btn-large btn-primary"
+								th:onclick="'uprawnieniaPlayer(' + ${player.idPlayer} + '); czekaj(500);'">Player</button>
+						</td>
+					</tr>
+
+					<tr>
+						<td />
+						<td />
+						<td />
+						<td />
+						<td />
+						<td />
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+
+		<a class="btn btn-large btn-primary" href="/logged">Wróć</a>
+	</div>
+
+	<script type="text/javascript">
+		function uprawnieniaPlayer(id) {
+			$.post('\changePermissionToPlayer', {
+				idPlayer : id
+			});
+		}
+
+		function uprawnieniaModerator(id) {
+			$.post('\changePermissionToMod', {
+				idPlayer : id
+			});
+		}
+
+		function uprawnieniaAdministrator(id) {
+			$.post('\changePermissionToAdmin', {
+				idPlayer : id
+			});
+		}
+
+		function czekaj(ms) {
+			setTimeout(function() {
+				window.location.href = '\changePermission';
+			}, ms);
+		}
+	</script>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

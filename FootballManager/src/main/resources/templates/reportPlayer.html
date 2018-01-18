@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Raportowanie użytkowników</title>
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+</meta>
+
+</head>
+<body>
+	<div class="container">
+			<div th:replace="fragments/navbar :: navbar"></div>
+			<div>
+			<div class="alert alert-success" th:if="${successAdd}"><strong>Sukces! </strong>Przyjęto skargę!</div>
+			<div class="alert alert-danger" th:if="${errorAdd}"><strong>Błąd! </strong>Nie utworzono skargi!</div>
+			<div class="alert alert-danger" th:if="${errorExist}"><strong>Błąd! </strong>Podany użytkownik nie istnieje.</div>
+				<form action="#" th:action="@{/addReport}" th:object="${reportForm}" method="post">
+					<input type="text" id="targetName" name="targetName" placeholder = "Nazwa gracza" th:value="${target}"/>
+					<input type="text" th:field="*{reason}" placeholder = "Powód (10-100 znaków)"/>
+					<button class="btn btn-large btn-primary" type="submit">Zgłoś</button>
+					<div class="alert alert-warning" th:if="${#fields.hasErrors('reason')}">Powód musi mieć minimum 10 i maksymalnie 100 znaków</div>
+					<div class="alert alert-warning" th:if="${#fields.hasErrors('targetName')}">Nazwa nie może być pusta i nie może zawierać znaków specjalnych</div>
+				</form>
+			</div>
+			
+			<div th:replace="fragments/footer :: footer"></div>
+	</div>
+
+</body>
+</html>

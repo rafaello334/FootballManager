@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+		<table class="table" style="margin-bottom: 40px;">
+			<thead>
+				<tr>
+					<th>Gospodarze</th>
+					<th>Goście</th>
+					<th>Data meczu</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="match : ${matchList}">
+					<td><span th:text="${teamDB.findById(match.idTeam1).name}"></span></td>
+					<td><span th:text="${teamDB.findById(match.idTeam2).name}"></span></td>
+					<td><span
+						th:text="${#temporals.format(match.datePlayed, 'dd MMM yyyy, HH:mm')}"></span></td>
+				</tr>
+				<tr>
+					<td />
+					<td />
+					<td />
+				</tr>
+			</tbody>
+		</table>
+		<div th:if="${matchList.size() == 0}">Brak nadchodzących meczów</div>
+</body>
+</html>

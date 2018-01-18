@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript"
+	src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/prestige.js"></script>
+<title>Zarządzanie ligami</title>
+</head>
+<body id="body">
+
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+
+		<div class="col-lg-10">
+			<h3>Lista dostępnych lig</h3>
+			
+			<span th:if="${join} or ${errorFullLeague} or ${errorContainsPlayer}">
+				<br/>
+				<span class="alert alert-success" th:if="${join}">Dołączono do ligi.</span>
+				<span class="alert alert-danger" th:if="${errorFullLeague}">Dołączenie do ligi nie powiodło się. Liga jest pełna.</span>
+				<span class="alert alert-danger" th:if="${errorContainsPlayer}">Dołączenie do ligi nie powiodło się. Nie możesz mieć wielu drużyn w tej samej lidze.</span>
+				<br/><br/>
+			</span>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Wymagany prestiż</th>
+						<th>Wymagana liczba drużyn</th>
+						<th>Aktualna liczba drużyn</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="league : ${leagueList}">
+						<td><span th:text="${league.name}"></span></td>
+						<td><span th:text="${league.requiredPrestige}"></span></td>
+						<td><span th:text="${league.requiredNumberOfTeams}"></span></td>
+						<td><span th:text="${league.actualNumberOfTeams}"></span></td>
+						<td><a class="btn btn-large btn-primary" th:onclick="'joinLeague(' + ${idTeam} + ',' + ${league.idLeague} + ')'">Dołącz do ligi</a></td>
+						
+						<td></td>
+					</tr>
+
+					<tr>
+						<td />
+						<td />
+						<td />
+						<td />
+						<td />
+						<td />
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+		<div class="col-lg-2" th:replace="fragments/prestige :: prestige"></div>
+		<div th:replace="fragments/footer :: footer"></div>
+
+		<script type="text/javascript" th:inline="javascript" th:if="${leagueList} != null">
+			function joinLeague(idTeam, idLeague) {
+				$.ajax({
+					method : 'POST',
+					url : 'joinLeague',
+					data : {
+						idTeam : idTeam,
+						idLeague : idLeague
+					}
+				}).done(function(html) {
+					window.location.href = 'joinLeague?idTeam=' + idTeam;
+				});
+			}
+		</script>
+	</div>
+</body>
+</html>

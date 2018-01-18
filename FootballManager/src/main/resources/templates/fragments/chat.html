@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	th:href="@{/css/style.css}" />
+<title>Chat</title>
+
+</head>
+
+<body>
+	<div class="panel panel-primary" th:fragment="chat">
+		<div class="panel-heading" id="accordion">
+			<span class="glyphicon glyphicon-comment"></span>
+			<span th:text="${league.idLeague == 0} ? 'Czat' : 'Czat ligi'"></span>
+			<div class="btn-group pull-right">
+				<button class="btn btn-default btn-xs" onClick="reloadChat()">
+					<span class="glyphicon glyphicon-refresh"></span>
+				</button>
+				<a type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#chatCollapse" data-parent="#accordion">
+					<span class="glyphicon glyphicon-menu-hamburger"></span>
+				</a>
+			</div>
+		</div>
+		<div class="panel-collapse collapse" id="chatCollapse">
+			<div class="panel-body">
+				<span id="chatHook"></span>
+			</div>
+			<div class="panel-footer">
+				<div class="input-group">
+					<input id="msgText" type="text" class="form-control input-sm" placeholder="Napisz wiadomość..." />
+					<span class="input-group-btn">
+						<button class="btn btn-warning btn-sm" id="msgSend" onClick="sendMessage()">Wyślij</button>
+					</span>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/js.cookie.js"></script>
+		<script type="text/javascript" th:inline="javascript">
+			var reloadChat = function() {
+				$('#chatHook').load('/getChat?idChat=' + [[${league.idLeague}]]);
+			}
+			
+			$(document).ready(function() {
+				reloadChat();
+				setInterval(reloadChat, 1000 * 60); //1 minuta
+			});
+			
+			$("#msgText").keyup(function(event) {
+			    if(event.keyCode == 13) {
+			        $("#msgSend").click();
+			    }
+			});
+			
+			function sendMessage() {
+				let input = $('#msgText');
+				if(input.val().length > 120) {
+					alert("Wiadomość nie może przekraczać 120 znaków!");
+				} else if(input.val().length > 0) {
+					input.attr('disabled', true);
+					let btn = $('#msgSend');
+					btn.attr('disabled', true);
+					$.ajax({
+						method: 'POST',
+						url: 'postChat',
+						data: { text: input.val(), login: Cookies.get('fm-login'), chatId: [[${league.idLeague}]] }
+					}).done(function(html) {
+						$('#chatHook').html(html);
+						input.val("");
+						input.attr('disabled', false);
+						btn.attr('disabled', false);
+					});
+				} else {
+					alert("Wiadomość nie może być pusta!");
+				}
+			}
+			
+			function setRemoved(id, remove) {
+				$.ajax({
+					method: 'POST',
+					url: 'removeChatMessage',
+					data: { id: id, removed: remove }
+				}).done(function(html) {
+					$('#chatHook').html(html);
+				});
+			}
+		</script>
+	</div>
+</body>
+</html>

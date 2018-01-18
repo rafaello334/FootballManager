@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript"
+	src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<title>Aktywacja kont</title>
+</head>
+
+<body>
+	<div th:replace="fragments/navbar :: navbar"></div>
+
+	<h1>Aktywacja kont</h1>
+
+	<div class="container" th:action="@{/activateAccount}" method="post">
+		<ul th:each="player : ${inactivePlayerList}">
+			<li class="list-group-item"><input type="checkbox" class="chkbx" />
+				<span th:text="${player.login}" th:id="${player.idPlayer}"></span>
+				<button class="btn btn-large btn-primary"
+					th:onclick="'aktywuj(' + ${player.idPlayer} + '); czekaj(500);'">Aktywuj</button>
+			</li>
+		</ul>
+	</div>
+	<button class="btn btn-large btn-primary" onclick="wszystko()">Wszystko</button>
+	<br />
+	<br />
+	<button class="btn btn-large btn-primary" onclick="aktywujZaznaczone()">Aktywuj
+		zaznaczone</button>
+
+	<a class="btn btn-large btn-primary pull-right" href="/logged">Wróć</a>
+
+	<script type="text/javascript">
+		var zaznacz = true;
+
+		function aktywuj(id) {
+			$.post('\activateAccount', {
+				accountId : id
+			});
+		}
+
+		function czekaj(ms) {
+			setTimeout(function() {
+				window.location.href = '\activateAccount';
+			}, ms);
+		}
+
+		function wszystko() {
+			$('.chkbx').prop('checked', zaznacz);
+			zaznacz = !zaznacz;
+		}
+
+		function aktywujZaznaczone() {
+			$('.chkbx').filter(function(index, element) {
+				return element.checked;
+			}).next('span').each(function(index, element) {
+				aktywuj(element.id);
+			});
+			czekaj(500);
+		}
+	</script>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

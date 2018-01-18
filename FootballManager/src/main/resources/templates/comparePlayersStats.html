@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/budget.js"></script>
+<title>Porównanie zawodników</title>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<h1 style="margin-bottom: 40px">Porównanie zawodników</h1>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Nazwa atrybutu</th>
+					<th>Pierwszy zawodnik</th>
+					<th>Drugi zawodnik</th>
+				</tr>
+			</thead>
+			
+			<tr>
+				<td>ID</td>
+				<td><span th:text="${firstPlayer.idNPC}"></span></td>
+				<td><span th:text="${secondPlayer.idNPC}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Nazwa</td>
+				<td><span th:text="${firstPlayer.name}"></span></td>
+				<td><span th:text="${secondPlayer.name}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Koszt</td>
+				<td><span th:text="${firstPlayer.cost}"></span></td>
+				<td><span th:text="${secondPlayer.cost}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Kondycja</td>
+				<td><span th:text="${firstPlayer.stamina}"></span></td>
+				<td><span th:text="${secondPlayer.stamina}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Siła</td>
+				<td><span th:text="${firstPlayer.strength}"></span></td>
+				<td><span th:text="${secondPlayer.strength}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Zwinność</td>
+				<td><span th:text="${firstPlayer.agility}"></span></td>
+				<td><span th:text="${secondPlayer.agility}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Szybkość</td>
+				<td><span th:text="${firstPlayer.speed}"></span></td>
+				<td><span th:text="${secondPlayer.speed}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Wytrzymałość</td>
+				<td><span th:text="${firstPlayer.endurance}"></span></td>
+				<td><span th:text="${secondPlayer.endurance}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Stan zdrowia</td>
+				<td><span th:text="${firstPlayer.health}"></span></td>
+				<td><span th:text="${secondPlayer.health}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Zmęczenie</td>
+				<td><span th:text="${firstPlayer.fatigue}"></span></td>
+				<td><span th:text="${secondPlayer.fatigue}"></span></td>
+			</tr>
+
+			<tr>
+				<td>Pozycja</td>
+				<td><span th:text="${firstPlayer.position.toStringFullName()}"></span></td>
+				<td><span th:text="${secondPlayer.position.toStringFullName()}"></span></td>
+			</tr>
+			
+			<tr><td><a class="btn btn-large btn-primary" th:href="'/comparePlayers?idTeam=' + ${idTeam}"  style="margin-top: 20px">Wróć</a></td><td/><td/></tr>
+		</table>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+	
+
+</body>
+</html>

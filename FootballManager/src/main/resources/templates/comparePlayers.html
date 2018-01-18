@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Porównywanie zawodników</title>
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/budget.js"></script>
+</meta>
+
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="row">
+			<div class="col-lg-10">
+				<h1>Porównywanie zawodników</h1>
+			</div>
+			
+			<div class="col-lg-2" th:replace="fragments/budget :: budget"></div>
+		</div>
+		
+			<form action="#" th:action="@{/comparePlayersStats}" th:object="${comparePlayersForm}" method="get">
+				<div class="row" style="margin: 10px 0px 10px 0px">
+					<div class="col-md-3 text-center">Nazwa pierwszego zawodnika</div>
+					<div class="col-md-2 text-center">
+						<input type="text" class="input-block-level"  th:field="*{firstPlayerName}"/>
+					</div>
+				</div>
+				
+				<div class="alert alert-danger" th:if="${errorEmptyFirstPlayerName}"><strong>Błąd!</strong> Podaj nazwę pierwszego zawodnika</div>
+				<div class="alert alert-danger" th:if="${errorFirstPlayer}"><strong>Błąd!</strong> Pierwszy zawodnik nie istnieje</div>
+				
+				<div class="row" style="margin: 10px 0px 0px 0px">
+					<div class="col-md-3 text-center">Nazwa drugiego zawodnika</div>
+					<div class="col-md-2 text-center">
+						<input type="text" class="input-block-level"  th:field="*{secondPlayerName}"/>
+					</div>
+				</div>
+			
+				<div class="alert alert-danger" th:if="${errorEmptySecondPlayerName}"><strong>Błąd!</strong> Podaj nazwę drugiego zawodnika</div>
+				<div class="alert alert-danger" th:if="${errorSecondPlayer}"><strong>Błąd!</strong> Drugi zawodnik nie istnieje</div>
+				
+				<div class="row" style="margin: 10px 0px 10px 0px">
+					<button class="btn btn-large btn-primary" type="submit">Porównaj</button>
+				</div>
+				
+				<input type="hidden" th:field="*{idTeam}"/>
+			</form>
+			<a class="btn btn-large btn-primary" th:href="'/teamDetails?idTeam=' + ${idTeam}">Wróć</a>
+			
+			<div th:replace="fragments/footer :: footer"></div>
+	</div>
+</body>
+</html>

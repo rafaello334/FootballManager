@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+		<title>Edycja konta</title>
+		<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+		<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+		<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	</meta>
+</head>
+<body>
+	
+	
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+	
+		<form action="#" th:action="@{/editAccount}" th:object="${editAccountForm}" method="post">
+			<h1>Edycja konta</h1>
+			<input type="text" class="input-block-level"  th:field="*{email}" placeholder="e-mail" />
+			<input type="password" class="input-block-level"  th:field="*{newPassword}" placeholder="Nowe hasło" />
+			<input type="password" class="input-block-level" th:field="*{confirmNewPassword}" placeholder="Potwierdź nowe hasło" />
+			<input type="password" class="input-block-level" th:field="*{password}" placeholder="Aktualne hasło" />
+			<div class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Błędne hasło</div>
+			<div class="alert alert-warning" th:if="${errorEmail}">Błędny email</div>
+			<div class="alert alert-danger" th:if="${errorPassword}"><strong>Błąd!</strong> Niepoprawne hasło!</div>
+			<div class="alert alert-warning" th:if="${success}"><strong>Sukces</strong>Zmieniono pomyślnie</div>
+			<button class="btn btn-large btn-primary" type="submit">Zatwierdź</button>
+			<a class="btn btn-large" href="/logged">Wróć</a>
+		</form>
+		
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+	
+	
+</body>
+</html>

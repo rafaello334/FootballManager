@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<title>Lista zgłoszeń</title>
+</head>
+<body class="container">
+
+<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="row">
+			<div class="col-lg-10" style="margin-bottom:70px;">
+				<h1>Raporty</h1>
+			</div>
+		</div>
+		<table class="table" style="margin-bottom:100px;">
+					<thead>
+						<tr>
+							<th>Zgłaszający</th>
+							<th>Data</th>
+							<th>Zgłaszany</th>
+							<th>Powód</th>
+							<th/>
+							<th/>
+						</tr>
+					</thead>
+				<tbody>
+					<tr th:each="report : ${reportList}">
+						<td><span th:text="${report.namePlayerSource}"></span></td>
+						<td><span th:text="${#temporals.format(report.dateReported, 'dd MMM yyyy, HH:mm')}"></span></td>
+						<td><span th:text="${report.namePlayerTarget}"></span></td>
+						<td><span th:text="${report.reason}"></span></td>
+						<td><button class="btn btn-danger btn-xs option-btn" th:onclick="'$.post(\'/accountManagement\', { accountId: ' + ${report.idPlayerTarget} + ' })'"><span class="glyphicon glyphicon-ban-circle"></span></button></td>
+						<td><a class="btn btn-warning btn-xs option-btn" th:href="@{/penalty(target=${report.namePlayerTarget})}"><span class="glyphicon glyphicon-euro"></span></a></td>
+					</tr>
+						
+					<tr>
+						<td/>
+						<td/>
+						<td/>
+						<td/>
+						<td/>
+						<td/>
+					</tr>
+				</tbody>
+		</table>
+		<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

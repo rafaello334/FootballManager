@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel='stylesheet'
+	href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+<link rel="stylesheet" type="text/css" href="css/style.css"
+	th:href="@{/css/style.css}" />
+<title>Navbar</title>
+
+</head>
+
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/logged">Strona główna</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li th:classappend="${module == 'reportPlayer' ? 'active' : ''}">
+						<a href="#" th:href="@{/reportPlayer}">Zgłoś nadużycie</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown" th:if="${modLogged}">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							Akcje moderatorskie <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li th:classappend="${module == 'reportList' ? 'active' : ''}">
+								<a href="#" th:href="@{/reportList}">
+									Przeglądanie zgłoszeń
+								</a>
+							</li>
+							<li th:classappend="${module == 'penalty' ? 'active' : ''}">
+								<a href="#" th:href="@{/penalty}">
+									Nałóż karę finansową
+								</a>
+							</li>
+							
+						</ul>
+					</li>
+				
+				
+				
+					<li class="dropdown" th:if="${adminLogged}">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							Akcje administratorskie <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li th:classappend="${module == 'accountManagement' ? 'active' : ''}">
+								<a href="#" th:href="@{/accountManagement}">
+									Zarządzanie	kontami
+								</a>
+							</li>
+							
+							<li th:classappend="${module == 'league' ? 'active' : ''}">
+								<a href="#" th:href="@{/league}">
+									Zarządzanie ligami
+								</a>
+							</li>
+							
+							<li th:classappend="${module == 'activateAccount' ? 'active' : ''}">
+								<a href="#" th:href="@{/activateAccount}">
+									Aktywacja kont
+								</a>
+							</li>
+							
+							<li th:classappend="${module == 'notifications' ? 'active' : ''}">
+								<a href="#" th:href="@{/notifications}">
+									Powiadomienia
+								</a>
+							</li>
+						</ul>
+					</li>
+
+					<li th:classappend="${module == 'editAccount' ? 'active' : ''}">
+						<a href="#" th:href="@{/editAccount}">Edytuj konto</a>
+					</li>
+
+					<li>
+						<a href="/logout" th:href="@{/logout}" onclick="$('#form').submit();">
+						<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Wyloguj
+						<span th:text="${login}"></span>
+					</a>
+						<form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

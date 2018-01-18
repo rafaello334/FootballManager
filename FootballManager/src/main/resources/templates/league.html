@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	
+	<title>Zarządzanie ligami</title>
+</head>
+<body>
+
+	<div class="container">
+		<div th:replace="fragments/navbar :: navbar"></div>
+		
+		<div class="col-lg-10" style="margin-bottom: 70px;">
+			<form action="#" th:action="@{/league}" th:object="${createLeagueForm}" method="post">
+				<h3>Tworzenie ligi</h3>
+				
+				<input type="text" class="input-block-level" th:field="*{name}" placeholder="Nazwa ligi" />
+				<input id="prestigeInput" type="text" class="input-block-level" th:field="*{requiredPrestige}" placeholder="Wymagany prestiż" />
+				<input id="numberOfTeamsInput" type="text" class="input-block-level" th:field="*{requiredNumberOfTeams}" placeholder="Wymagana liczba drużyn" />
+				<button class="btn btn-large btn-primary" type="submit">Utwórz lige</button>
+				<div class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+				<div class="alert alert-danger" th:if="${#fields.hasErrors('requiredPrestige')}" th:errors="*{requiredPrestige}"></div>
+				<div class="alert alert-danger" th:if="${#fields.hasErrors('requiredNumberOfTeams')}" th:errors="*{requiredNumberOfTeams}"></div>
+				<div class="alert alert-danger" th:if="${errorUnique}"><strong>Błąd!</strong> Zajęta nazwa!</div>
+				<div class="alert alert-danger" th:if="${errorEvenNumber}"><strong>Błąd!</strong> Liczba drużyn musi być parzysta</div>
+				<div class="alert alert-success" th:if="${success}"><strong>Sukces!</strong> Stworzono lige <span th:text="${name}"></span></div>
+			</form>
+		</div>
+		
+		<div class="col-lg-10">
+			<h3>Lista dostępnych lig</h3>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nazwa</th>
+						<th>Wymagany prestiż</th>
+						<th>Wymagany liczba drużyn</th>
+						<th>Aktualna liczba drużyn</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="league : ${leagueList}">
+						<td><span th:text="${league.name}"></span></td>
+						<td><span th:text="${league.requiredPrestige}"></span></td>
+						<td><span th:text="${league.requiredNumberOfTeams}"></span></td>
+						<td><span th:text="${league.actualNumberOfTeams}"></span></td>
+						<td>
+
+							<a class="btn btn-large btn-primary" th:href="@{/leagueDetails(idLeague=${league.idLeague}, admin=true)}">Szczegóły</a>
+
+						</td>
+						
+						<td></td>
+					</tr>
+					
+					<tr>
+						<td/>
+						<td/>
+						<td/>
+						<td/>
+						<td/>
+						<td/>	
+						<td/>	
+					</tr>
+				</tbody>
+			</table>		
+		</div>
+		<script type="text/javascript" th:if="${firstLoad} or ${success}">
+			$('#prestigeInput').val('');
+			$('#numberOfTeamsInput').val('');
+		</script>
+		<div th:replace="fragments/footer :: footer"></div>
+	</div>
+</body>
+</html>

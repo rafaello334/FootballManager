@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel='stylesheet' href='webjars/bootstrap/3.3.7-1/css/bootstrap.min.css' />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<script type="text/javascript" src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+	<script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+	<title>Logowanie</title>
+</head>
+
+<body class="container background-image">
+	
+<script>
+	var images=new Array('../images/background2.jpg','../images/background1.jpg','../images/background.jpg');
+	var nextimage=0;
+	doSlideshow();
+	
+	function doSlideshow(){
+	    if(nextimage>=images.length){nextimage=0;}
+	    $('.background-image')
+	    .css('background-image','url("'+images[nextimage++]+'")')
+	    .fadeIn(500,function(){
+	        setTimeout(doSlideshow,5000);
+	    });
+	}
+</script>
+	
+	
+	<div class="col md-4 text-center">
+		<a class="btn btn-large btn-primary button-enter" href="/login">Mam już konto</a>
+		<a class="btn btn-large btn-primary button-enter" href="/register">Jestem nowy</a>	
+	</div>
+	
+	<div class="col md-4 text-center">
+		<a class="btn btn-large btn-primary button-enter button-enter-how-to-play" href="/howToPlay">Jak grać</a>	
+	</div>
+
+	<div class="login-field">
+		<form action="#" th:action="@{/login}" th:object="${loginForm}" method="post">
+			<h3>Logowanie</h3>
+			<input type="text" class="input-block-level"  th:field="*{login}" placeholder="login" />
+			<input type="password" class="input-block-level"  th:field="*{password}" placeholder="hasło" />
+			
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('login')}">Błędny login</div>
+			<div class="alert alert-danger" th:if="${#fields.hasErrors('password')}">Błędne hasło</div>	
+			<div class="alert alert-danger" th:if="${errorPassword}"><strong>Błąd!</strong> Niepoprawny login lub hasło!</div>
+			<div class="alert alert-danger" th:if="${errorExist}"><strong>Błąd!</strong> Podany użytkownik nie istnieje!</div>
+			<div class="alert alert-danger" th:if="${errorBanned}"><strong>Błąd!</strong> Podany użytkownik został zbanowany!</div>
+			<div class="alert alert-danger" th:if="${errorInActive}"><strong>Błąd!</strong> Podany użytkownik jest nieaktywny!</div>
+					
+			<button class="btn btn-large btn-primary" type="submit">Zaloguj</button>
+		</form>
+	</div>
+		
+</body>
+</html>
